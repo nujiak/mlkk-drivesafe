@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.widget.ViewPager2
 import com.mylongkenkai.drivesafe.databinding.ActivityMainBinding
 import com.mylongkenkai.drivesafe.fragments.ExclusionsFragment
 import com.mylongkenkai.drivesafe.fragments.LogFragment
@@ -17,8 +18,31 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
 
+        val viewPager = binding.mainViewpager
+        val btmNavBar = binding.mainBtmNavBar
+
         // Add MainPagerAdapter to view pager
-        binding.mainViewpager.adapter = MainPagerAdapter(this)
+        viewPager.adapter = MainPagerAdapter(this)
+
+        // Connect view pager to bottom navigation bar
+        viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                when (position) {
+                    0 -> btmNavBar.selectedItemId = R.id.btm_nav_exclusions
+                    1 -> btmNavBar.selectedItemId = R.id.btm_nav_log
+                }
+            }
+        })
+
+        // Connect bottom navigation bar to view pager
+        btmNavBar.setOnItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.btm_nav_exclusions -> viewPager.currentItem = 0
+                R.id.btm_nav_log -> viewPager.currentItem = 1
+            }
+            true
+        }
 
         setContentView(binding.root)
     }
