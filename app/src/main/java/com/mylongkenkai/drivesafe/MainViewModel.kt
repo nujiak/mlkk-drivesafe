@@ -6,13 +6,19 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.mylongkenkai.drivesafe.data.AppDatabase
 import com.mylongkenkai.drivesafe.data.Exclusion
 import com.mylongkenkai.drivesafe.sensor.LinearAccelerometerLiveData
 import com.mylongkenkai.drivesafe.state.BlockingStateLiveData
-import com.mylongkenkai.drivesafe.state.ExclusionsLiveData
+import kotlinx.coroutines.*
 
 class MainViewModel(app: Application) : AndroidViewModel(app) {
-    private val exclusions = ExclusionsLiveData
+
+    private val viewModelJob = Job()
+    private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
+
+    private val exclusionsDb = AppDatabase.getInstance(app).exclusionDao()
+    private val exclusions = exclusionsDb.getAll()
 
     val linearAccelerometerLiveData = LinearAccelerometerLiveData(app)
 
@@ -20,12 +26,12 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
         return exclusions
     }
 
-    fun addExclusion(exclusion : Exclusion) {
-        exclusions.add(exclusion)
+    fun addExclusion(exclusion : Exclusion) = uiScope.launch {
+        insertExclusion(exclusion)
     }
 
-    fun removeExclusion(exclusion : Exclusion) {
-        exclusions.delete(exclusion)
+    fun removeExclusion(exclusion : Exclusion) = uiScope.launch {
+        deleteExclusion(exclusion)
     }
 
     val isBlocking = BlockingStateLiveData
@@ -43,5 +49,13 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
      */
     fun finishBlocking() {
         isBlocking.stopBlocking()
+    }
+
+    private suspend fun insertExclusion(exclusion: Exclusion) = withContext(Dispatchers.IO) {
+        exclusionsDb.insert(exclusion)
+    }
+
+    private suspend fun deleteExclusion(exclusion: Exclusion) = withContext(Dispatchers.IO) {
+        exclusionsDb.delete(exclusion)
     }
 }
