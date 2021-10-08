@@ -3,7 +3,6 @@ package com.mylongkenkai.drivesafe.fragments
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import com.mylongkenkai.drivesafe.R
@@ -22,7 +21,6 @@ class InputDialog : androidx.fragment.app.DialogFragment() {
             val builder = AlertDialog.Builder(it).setTitle("Add an Emergency Number")
                 .setView(requireActivity().layoutInflater.inflate(R.layout.dialog_input, null))
                 .setPositiveButton(android.R.string.ok) { _, _ ->
-                    Log.w(this::class.simpleName, "${this.view}")
                     listener.onDialogPositiveClick(this)
                 }
                 .setNegativeButton(android.R.string.cancel) { _, _ ->

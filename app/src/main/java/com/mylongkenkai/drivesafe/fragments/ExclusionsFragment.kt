@@ -1,12 +1,15 @@
 package com.mylongkenkai.drivesafe.fragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.mylongkenkai.drivesafe.MainViewModel
+import com.mylongkenkai.drivesafe.data.ExclusionAdapter
 import com.mylongkenkai.drivesafe.databinding.FragmentExclusionsBinding
 
 class ExclusionsFragment : Fragment() {
@@ -24,8 +27,11 @@ class ExclusionsFragment : Fragment() {
         _binding = FragmentExclusionsBinding.inflate(inflater, container, false)
 
         // Update body based on exclusions data
+        binding.exclusionList.layoutManager = LinearLayoutManager(context)
         model.getExclusions().observe(viewLifecycleOwner) {
-            binding.exclusionsBodyText.text = it.joinToString(",\n")
+            Log.i(this::class.simpleName, it.toString())
+            val newAdapter = ExclusionAdapter(it)
+            binding.exclusionList.swapAdapter(newAdapter,false)
         }
 
         // Add FAB functionality

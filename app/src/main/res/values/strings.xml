@@ -5,4 +5,6 @@
     <string name="exclusions_fab_content_desc">Add exclusion</string>
     <string name="phone_number">Phone Number</string>
     <string name="invalid_number">Invalid number</string>
+    <string name="example">Example</string>
+    <string name="delete">delete</string>
 </resources>
