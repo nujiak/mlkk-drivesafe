@@ -1,5 +1,6 @@
 package com.mylongkenkai.drivesafe
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -49,7 +50,16 @@ class MainActivity : AppCompatActivity() {
         }
 
         model.linearAccelerometerLiveData.observe(this) {
-            Log.i(this::class.simpleName, it.toString())
+            if (it > 20) {
+                model.startBlocking()
+            }
+        }
+
+        model.isBlocking.observe(this) { isBlocking ->
+            if (isBlocking) {
+                val lockoutIntent = Intent(this, LockoutActivity::class.java)
+                startActivity(lockoutIntent)
+            }
         }
 
         setContentView(binding.root)
