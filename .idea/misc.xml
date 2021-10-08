@@ -8,10 +8,12 @@
         <entry key="..\:/OneDrive/Documents/AndroidProjects/mlkk-drivesafe/app/src/main/res/layout/fragment_exclusions.xml" value="0.16" />
         <entry key="..\:/OneDrive/Documents/AndroidProjects/mlkk-drivesafe/app/src/main/res/layout/fragment_log.xml" value="0.17604166666666668" />
         <entry key="..\:/OneDrive/Documents/AndroidProjects/mlkk-drivesafe/app/src/main/res/menu/bottom_navigation_menu.xml" value="0.33177083333333335" />
+        <entry key="..\:/Users/myron/AndroidStudioProjects/mlkk-drivesafe/app/src/main/res/layout/dialog_input.xml" value="0.1" />
+        <entry key="..\:/Users/myron/AndroidStudioProjects/mlkk-drivesafe/app/src/main/res/layout/fragment_exclusions.xml" value="0.264" />
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">
