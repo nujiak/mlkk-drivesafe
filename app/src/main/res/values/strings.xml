@@ -7,4 +7,5 @@
     <string name="invalid_number">Invalid number</string>
     <string name="example">Example</string>
     <string name="delete">delete</string>
+    <string name="exclusion_dialog_title">Add an emergency number</string>
 </resources>

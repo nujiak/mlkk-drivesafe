@@ -4,6 +4,7 @@
     android:layout_height="match_parent">
     <EditText
         android:id="@+id/dialog_input_text_field"
+        android:layout_margin="16dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/phone_number" />
