@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.mylongkenkai.drivesafe.MainViewModel
+import com.mylongkenkai.drivesafe.data.Exclusion
 import com.mylongkenkai.drivesafe.databinding.FragmentExclusionsBinding
 import kotlin.random.Random
 
@@ -26,12 +27,12 @@ class ExclusionsFragment : Fragment() {
 
         // Update body based on exclusions data
         model.getExclusions().observe(viewLifecycleOwner) {
-            binding.exclusionsBodyText.setText(it.joinToString(", "))
+            binding.exclusionsBodyText.text = it.joinToString(",\n")
         }
 
         // Add FAB functionality
         binding.exclusionsFab.setOnClickListener {
-            model.addExclusion(Random.nextInt(90000000, 99999999).toString())
+            model.addExclusion(Exclusion(Random.nextInt(10000000,99999999))) // change this random thing to a input thing
         }
 
         return binding.root
