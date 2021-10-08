@@ -9,11 +9,10 @@ import androidx.lifecycle.ViewModel
 import com.mylongkenkai.drivesafe.data.Exclusion
 import com.mylongkenkai.drivesafe.sensor.LinearAccelerometerLiveData
 import com.mylongkenkai.drivesafe.state.BlockingStateLiveData
+import com.mylongkenkai.drivesafe.state.ExclusionsLiveData
 
 class MainViewModel(app: Application) : AndroidViewModel(app) {
-    private val exclusions: MutableLiveData<List<Exclusion>> by lazy {
-        MutableLiveData<List<Exclusion>>(emptyList())
-    }
+    private val exclusions = ExclusionsLiveData
 
     val linearAccelerometerLiveData = LinearAccelerometerLiveData(app)
 
@@ -22,15 +21,11 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     }
 
     fun addExclusion(exclusion : Exclusion) {
-        val list = exclusions.value?.toMutableList()
-        list?.add(exclusion)
-        exclusions.value = list
+        exclusions.add(exclusion)
     }
 
     fun removeExclusion(exclusion : Exclusion) {
-        val list = exclusions.value?.toMutableList()
-        list?.remove(exclusion)
-        exclusions.value = list
+        exclusions.delete(exclusion)
     }
 
     val isBlocking = BlockingStateLiveData
