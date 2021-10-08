@@ -2,6 +2,8 @@ package com.mylongkenkai.drivesafe
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
@@ -12,6 +14,8 @@ import com.mylongkenkai.drivesafe.fragments.LogFragment
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+
+    private val model : MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +46,10 @@ class MainActivity : AppCompatActivity() {
                 R.id.btm_nav_log -> viewPager.currentItem = 1
             }
             true
+        }
+
+        model.linearAccelerometerLiveData.observe(this) {
+            Log.i(this::class.simpleName, it.toString())
         }
 
         setContentView(binding.root)
