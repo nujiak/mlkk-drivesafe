@@ -1,10 +1,12 @@
 package com.mylongkenkai.drivesafe
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.EditText
 import androidx.activity.viewModels
 import androidx.fragment.app.DialogFragment
+import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
@@ -52,6 +54,19 @@ class MainActivity : AppCompatActivity(),
                 R.id.btm_nav_log -> viewPager.currentItem = 1
             }
             true
+        }
+
+        model.linearAccelerometerLiveData.observe(this) {
+            if (it > 20) {
+                model.startBlocking()
+            }
+        }
+
+        model.isBlocking.observe(this) { isBlocking ->
+            if (isBlocking) {
+                val lockoutIntent = Intent(this, LockoutActivity::class.java)
+                startActivity(lockoutIntent)
+            }
         }
 
         setContentView(binding.root)
