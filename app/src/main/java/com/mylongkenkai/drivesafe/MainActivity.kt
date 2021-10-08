@@ -2,16 +2,26 @@ package com.mylongkenkai.drivesafe
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.EditText
+import androidx.activity.viewModels
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.snackbar.Snackbar
+import com.mylongkenkai.drivesafe.data.Exclusion
 import com.mylongkenkai.drivesafe.databinding.ActivityMainBinding
 import com.mylongkenkai.drivesafe.fragments.ExclusionsFragment
+import com.mylongkenkai.drivesafe.fragments.InputDialog
 import com.mylongkenkai.drivesafe.fragments.LogFragment
+import java.lang.Exception
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(),
+        InputDialog.InputDialogListener {
 
     private lateinit var binding: ActivityMainBinding
+
+    private val model : MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +56,26 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(binding.root)
     }
+
+    override fun onDialogPositiveClick(dialogFragment: DialogFragment) {
+        val editText = dialogFragment.dialog?.findViewById<EditText>(R.id.dialog_input_text_field)
+        editText?.let {
+            val input = editText.text
+            try {
+                val number = input.toString().toInt()
+                model.addExclusion(Exclusion(number))
+            } catch (e : Exception) {
+                Snackbar.make(binding.root, R.string.invalid_number, Snackbar.LENGTH_SHORT).show()
+            } finally {
+                dialogFragment.dismiss()
+            }
+        }
+    }
+
+    override fun onDialogNegativeClick(dialog: DialogFragment) {
+        dialog.dismiss()
+    }
+
 
     /**
      * Adapter for View Pager in MainActivity
