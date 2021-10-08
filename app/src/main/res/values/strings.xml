@@ -3,4 +3,6 @@
     <string name="log">Log</string>
     <string name="exclusions">Exclusions</string>
     <string name="exclusions_fab_content_desc">Add exclusion</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="invalid_number">Invalid number</string>
 </resources>

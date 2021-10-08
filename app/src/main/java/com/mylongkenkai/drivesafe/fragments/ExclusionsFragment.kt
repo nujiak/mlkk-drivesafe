@@ -7,9 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.mylongkenkai.drivesafe.MainViewModel
-import com.mylongkenkai.drivesafe.data.Exclusion
 import com.mylongkenkai.drivesafe.databinding.FragmentExclusionsBinding
-import kotlin.random.Random
 
 class ExclusionsFragment : Fragment() {
 
@@ -32,7 +30,8 @@ class ExclusionsFragment : Fragment() {
 
         // Add FAB functionality
         binding.exclusionsFab.setOnClickListener {
-            model.addExclusion(Exclusion(Random.nextInt(10000000,99999999))) // change this random thing to a input thing
+            val inputDialog = InputDialog()
+            inputDialog.show(childFragmentManager, "InputDialog")
         }
 
         return binding.root
