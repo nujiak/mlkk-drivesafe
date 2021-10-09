@@ -10,6 +10,7 @@ import androidx.lifecycle.AndroidViewModel
 import com.mylongkenkai.drivesafe.data.AppDatabase
 import com.mylongkenkai.drivesafe.data.Exclusion
 import com.mylongkenkai.drivesafe.data.Record
+import com.mylongkenkai.drivesafe.data.SpeedLiveData
 import kotlinx.coroutines.*
 import java.util.*
 
@@ -22,6 +23,8 @@ class LockoutViewModel(app: Application) : AndroidViewModel(app) {
     private val exclusionDb = AppDatabase.getInstance(app).exclusionDao()
 
     val exclusions = exclusionDb.getAll()
+
+    val speed = SpeedLiveData(app)
 
     private var exclusionsList: List<Exclusion> = emptyList()
 
@@ -55,6 +58,15 @@ class LockoutViewModel(app: Application) : AndroidViewModel(app) {
         telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE)
     }
 
+    fun addRecordEnd() {
+        if (speed.value!! < 10) {
+            val record = Record(0, Date(), Tag.END)
+            addRecord(record)
+        } else {
+            val record = Record(0, Date(), Tag.PREMATURE)
+            addRecord(record)
+        }
+    }
 
     fun addRecord(record: Record) = uiScope.launch {
         insertRecord(record)
