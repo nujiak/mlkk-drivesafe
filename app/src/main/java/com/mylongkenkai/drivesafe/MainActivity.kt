@@ -14,12 +14,14 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
+import androidx.work.*
 import com.google.android.material.snackbar.Snackbar
 import com.mylongkenkai.drivesafe.data.Exclusion
 import com.mylongkenkai.drivesafe.databinding.ActivityMainBinding
 import com.mylongkenkai.drivesafe.fragments.ExclusionsFragment
 import com.mylongkenkai.drivesafe.fragments.InputDialog
 import com.mylongkenkai.drivesafe.fragments.RecordFragment
+import com.mylongkenkai.drivesafe.work.DetectionWorker
 
 
 class MainActivity : AppCompatActivity(),
@@ -61,6 +63,12 @@ class MainActivity : AppCompatActivity(),
             }
             true
         }
+
+        // Begin foreground speed detection
+        val detectionWorkRequest: OneTimeWorkRequest = OneTimeWorkRequestBuilder<DetectionWorker>().build()
+
+        WorkManager.getInstance(applicationContext)
+            .enqueueUniqueWork("detect", ExistingWorkPolicy.REPLACE, detectionWorkRequest)
         setContentView(binding.root)
     }
 
@@ -119,21 +127,25 @@ class MainActivity : AppCompatActivity(),
 
     private fun requestPermissions() {
 
-        // Request location permissions
         val backgroundLocationAccessPermissionLauncher =
             registerForActivityResult(ActivityResultContracts.RequestPermission()) {
                 // Check DND permission after
                 checkAndRequestDndPermission()
             }
-        val permissionLauncher =
+
+        val fineLocationPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
+            if (it && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                backgroundLocationAccessPermissionLauncher.launch(Manifest.permission.ACCESS_BACKGROUND_LOCATION)
+            } else {
+                checkAndRequestDndPermission()
+            }
+        }
+
+        val readCallLogPermissionLauncher =
             registerForActivityResult(ActivityResultContracts.RequestPermission()) {
-                if (it && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    backgroundLocationAccessPermissionLauncher.launch(Manifest.permission.ACCESS_BACKGROUND_LOCATION)
-                } else {
-                    checkAndRequestDndPermission()
-                }
+                fineLocationPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
             }
 
-        permissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+        readCallLogPermissionLauncher.launch(Manifest.permission.READ_CALL_LOG)
     }
 }

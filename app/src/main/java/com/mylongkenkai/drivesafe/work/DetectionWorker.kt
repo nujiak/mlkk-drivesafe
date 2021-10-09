@@ -86,14 +86,17 @@ class DetectionWorker(appContext: Context, workerParams: WorkerParameters):
             lastLocation = location
         }
 
-        if (location.time > lastLocation!!.time) {
-            val distance = location.distanceTo(lastLocation)    // in metres
-            val duration = location.time - lastLocation!!.time  // in milliseconds
-            val speed = distance / (duration / 1000)            // in metres per second
-            if (speed > 10) {
-                startLockout()
+        lastLocation?.let {
+            if (location.time > it.time) {
+                val distance = location.distanceTo(lastLocation)    // in metres
+                val duration = location.time - it.time              // in milliseconds
+                val speed = distance / (duration / 1000)            // in metres per second
+                if (speed > 10) {
+                    startLockout()
+                }
             }
         }
+
     }
 
     private val listener = object : LocationListener {
