@@ -1,7 +1,6 @@
 package com.mylongkenkai.drivesafe.fragments
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -29,8 +28,7 @@ class ExclusionsFragment : Fragment() {
         // Update body based on exclusions data
         binding.exclusionList.layoutManager = LinearLayoutManager(context)
         model.getExclusions().observe(viewLifecycleOwner) {
-            Log.i(this::class.simpleName, it.toString())
-            val newAdapter = ExclusionAdapter(it)
+            val newAdapter = ExclusionAdapter(it, model::removeExclusion)
             binding.exclusionList.swapAdapter(newAdapter,false)
         }
 

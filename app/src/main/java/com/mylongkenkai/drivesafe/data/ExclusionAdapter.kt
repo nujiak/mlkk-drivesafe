@@ -11,7 +11,8 @@ import com.mylongkenkai.drivesafe.R
 
 
 class ExclusionAdapter(
-    private val exclusions: List<Exclusion>
+    private val exclusions: List<Exclusion>,
+    private val delete: (Exclusion) -> Unit
 ) : RecyclerView.Adapter<ExclusionAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -21,8 +22,10 @@ class ExclusionAdapter(
             // Define click listener for the ViewHolder's View.
             phoneTextView = itemView.findViewById<TextView>(R.id.exclusion_item)
             deleteButton = itemView.findViewById<Button>(R.id.exclusion_button)
+
         }
     }
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -33,9 +36,11 @@ class ExclusionAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val currentExclusion = exclusions[position]
-        Log.i(this::class.simpleName, currentExclusion.toString())
         val textView = holder.phoneTextView
-        textView.setText(currentExclusion.phoneNumber.toString())
+        textView.text = currentExclusion.phoneNumber.toString()
+        holder.deleteButton.setOnClickListener {
+            delete(currentExclusion)
+        }
     }
 
     override fun getItemCount(): Int {
