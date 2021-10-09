@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.mylongkenkai.drivesafe.data.AppDatabase
 import com.mylongkenkai.drivesafe.data.Exclusion
+import com.mylongkenkai.drivesafe.data.Record
 import com.mylongkenkai.drivesafe.sensor.LinearAccelerometerLiveData
 import com.mylongkenkai.drivesafe.state.BlockingStateLiveData
 import kotlinx.coroutines.*
@@ -19,6 +20,9 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
 
     private val exclusionsDb = AppDatabase.getInstance(app).exclusionDao()
     private val exclusions = exclusionsDb.getAll()
+
+    private val recordsDb = AppDatabase.getInstance(app).recordDao()
+    private val records = recordsDb.getAll()
 
     val linearAccelerometerLiveData = LinearAccelerometerLiveData(app)
 
@@ -32,6 +36,10 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
 
     fun removeExclusion(exclusion : Exclusion) = uiScope.launch {
         deleteExclusion(exclusion)
+    }
+
+    fun getRecords() : LiveData<List<Record>> {
+        return records
     }
 
     val isBlocking = BlockingStateLiveData

@@ -22,7 +22,6 @@ class ExclusionAdapter(
             // Define click listener for the ViewHolder's View.
             phoneTextView = itemView.findViewById<TextView>(R.id.exclusion_item)
             deleteButton = itemView.findViewById<Button>(R.id.exclusion_button)
-
         }
     }
 
