@@ -22,10 +22,8 @@ class LockoutActivity : AppCompatActivity() {
         notificationManager.onDOD()
         val currentTime = Record(0,Date(), Tag.START)
         model.addRecord(currentTime)
-
         binding = ActivityLockoutBinding.inflate(layoutInflater)
-
-        binding.lockoutAccelerometerReading.setText(R.string.lockout_screen)
+        binding.lockoutText.setText(R.string.lockout_screen)
 
         model.exclusions.observe(this) {
             Log.w(this::class.simpleName, "$it")
@@ -34,6 +32,7 @@ class LockoutActivity : AppCompatActivity() {
 
         model.speed.observe(this) {
             Log.w("speed", "$it")
+            binding.lockoutSpeedReading.text = getString(R.string.lockout_speed_text, it)
         }
 
         setContentView(binding.root)
@@ -41,8 +40,7 @@ class LockoutActivity : AppCompatActivity() {
     
     override fun onStop() {
         super.onStop()
-        val currentTime = Record(0, Date(), Tag.END)
-        model.addRecord(currentTime)
+        model.addRecordEnd()
         val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.offDOD()
 
