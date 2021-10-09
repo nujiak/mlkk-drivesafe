@@ -32,6 +32,10 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
         deleteExclusion(exclusion)
     }
 
+    fun addRecord(record : Record) = uiScope.launch {
+        insertRecord(record)
+    }
+
     fun getRecords() : LiveData<List<Record>> {
         return records
     }
@@ -42,5 +46,9 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
 
     private suspend fun deleteExclusion(exclusion: Exclusion) = withContext(Dispatchers.IO) {
         exclusionsDb.delete(exclusion)
+    }
+
+    private suspend fun insertRecord(record: Record) = withContext(Dispatchers.IO) {
+        recordsDb.insert(record)
     }
 }
