@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Context.LOCATION_SERVICE
 import android.content.Context.NOTIFICATION_SERVICE
 import android.content.Intent
+import android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
@@ -17,15 +18,15 @@ import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
-import android.os.Looper
-import android.util.Log
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
-import androidx.work.*
+import androidx.work.CoroutineWorker
+import androidx.work.ForegroundInfo
+import androidx.work.WorkManager
+import androidx.work.WorkerParameters
 import com.mylongkenkai.drivesafe.LockoutActivity
 import com.mylongkenkai.drivesafe.R
-import java.util.*
+import kotlinx.coroutines.delay
 import kotlin.math.pow
 import kotlin.math.sqrt
 
@@ -41,52 +42,63 @@ class DetectionWorker(appContext: Context, workerParams: WorkerParameters):
 
     override suspend fun doWork(): Result {
 
+        // Show notification
+        setForeground(createForegroundInfo())
+
         // Begin detection
         detectByLocation()
         detectBySensor()
 
-        // Show notification
-        setForeground(createForegroundInfo())
-
         return Result.success()
     }
 
-    @SuppressLint("MissingPermission")
-    private fun detectByLocation() {
-        Log.i(this::class.simpleName, "Attempting to detect by location")
-        val locationManager = applicationContext.getSystemService(LOCATION_SERVICE) as LocationManager
+    private var lastLocation : Location? = null
+
+    @SuppressLint("MissingPermission", "RestrictedApi")
+    private suspend fun detectByLocation() {
+        val locationManager =
+            applicationContext.getSystemService(LOCATION_SERVICE) as LocationManager
 
         val provider = locationManager.getBestProvider(Criteria(), true) ?: return
 
-        locationManager.requestLocationUpdates(provider, 1000, 0.0f, listener, applicationContext.mainLooper)
+        while (true) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                locationManager.getCurrentLocation(
+                    provider,
+                    null,
+                    backgroundExecutor,
+                    this::onLocationUpdate
+                )
+            } else {
+                locationManager.requestSingleUpdate(
+                    provider,
+                    listener,
+                    applicationContext.mainLooper
+                )
+            }
+
+            delay(5000)
+        }
     }
 
-    private var lastLocation : Location? = null
-    private var lastUpdateTime = System.currentTimeMillis()
-
-    val listener = object : LocationListener {
-
-        override fun onLocationChanged(location: Location) {
-            Log.i(this::class.simpleName, "Location updated")
-
-            val currentTime = System.currentTimeMillis()
-
-            if (currentTime - lastUpdateTime < 5000) {
-                return
-            }
-
-            if (lastLocation != null) {
-                val distance = location.distanceTo(lastLocation)      // in metres
-                val duration = currentTime - lastUpdateTime     // in milliseconds
-                val speed = distance / (duration / 1000)        // in metres per second
-                Log.i(this::class.simpleName, "Speed: $speed")
-                if (speed > 10) {
-                    startLockout()
-                }
-            }
+    private fun onLocationUpdate(location: Location) {
+        if (lastLocation == null) {
             lastLocation = location
-            lastUpdateTime = currentTime
         }
+
+        if (location.time > lastLocation!!.time) {
+            val distance = location.distanceTo(lastLocation)    // in metres
+            val duration = location.time - lastLocation!!.time  // in milliseconds
+            val speed = distance / (duration / 1000)            // in metres per second
+            if (speed > 10) {
+                startLockout()
+            }
+        }
+    }
+
+    private val listener = object : LocationListener {
+
+        override fun onLocationChanged(location: Location) = onLocationUpdate(location)
 
         override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
         }
@@ -144,7 +156,12 @@ class DetectionWorker(appContext: Context, workerParams: WorkerParameters):
             .setSmallIcon(R.drawable.ic_launcher_foreground)
             .build()
 
-        return ForegroundInfo(0, notification)
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            ForegroundInfo(0, notification, FOREGROUND_SERVICE_TYPE_LOCATION)
+        } else {
+            ForegroundInfo(0, notification)
+
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
