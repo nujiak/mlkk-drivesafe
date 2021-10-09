@@ -30,7 +30,7 @@ class ExclusionsFragment : Fragment() {
         binding.exclusionList.layoutManager = LinearLayoutManager(context)
         model.getExclusions().observe(viewLifecycleOwner) {
             Log.i(this::class.simpleName, it.toString())
-            val newAdapter = ExclusionAdapter(it)
+            val newAdapter = ExclusionAdapter(it, model::removeExclusion)
             binding.exclusionList.swapAdapter(newAdapter,false)
         }
 
