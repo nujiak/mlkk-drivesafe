@@ -12,8 +12,8 @@ class RecordAdapter (
     ) : RecyclerView.Adapter<RecordAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val recordTypeView : TextView = itemView.findViewById(R.id.record_type)
-        val dateAndTimeView : TextView = itemView.findViewById(R.id.record_date_time)
+        val recordTypeTextView : TextView = itemView.findViewById(R.id.record_type)
+        val dateTimeTextView : TextView = itemView.findViewById(R.id.record_date_time)
     }
 
 
@@ -26,10 +26,11 @@ class RecordAdapter (
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val record = recordsList[position]
 
-        val dateTextView = holder.dateAndTimeView
+        val dateTimeTextView = holder.dateTimeTextView
+        val recordTypeTextView = holder.recordTypeTextView
 
-        holder.recordTypeView.text = record.type.text
-        dateTextView.text = record.dateTime.toString()
+        recordTypeTextView.text = recordTypeTextView.resources.getString(record.type.text)
+        dateTimeTextView.text = record.dateTime.toString()
     }
 
     override fun getItemCount(): Int {

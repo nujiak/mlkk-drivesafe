@@ -15,4 +15,9 @@
 
     <string name="notification_channel_id">Detection</string>
     <string name="notification_channel_desc">Allows DriveSafe to monitor your speed</string>
+
+    <string name="tag_start">Started</string>
+    <string name="tag_end">Closed</string>
+    <string name="tag_premature">Closed prematurely</string>
+    <string name="tag_call">Answered call</string>
 </resources>
