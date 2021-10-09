@@ -24,7 +24,7 @@ class InputDialog : androidx.fragment.app.DialogFragment() {
                     listener.onDialogPositiveClick(this)
                 }
                 .setNegativeButton(android.R.string.cancel) { _, _ ->
-                    listener.onDialogPositiveClick(this) // User cancelled the dialog
+                    listener.onDialogNegativeClick(this) // User cancelled the dialog
                 }
 
             // Create the AlertDialog

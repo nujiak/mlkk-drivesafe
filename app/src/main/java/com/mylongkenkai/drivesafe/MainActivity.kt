@@ -80,7 +80,11 @@ class MainActivity : AppCompatActivity(),
                 val number = input.toString().toInt()
                 model.addExclusion(Exclusion(number))
             } catch (e: Exception) {
-                Snackbar.make(binding.root, R.string.invalid_number, Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(binding.root, R.string.invalid_number, Snackbar.LENGTH_SHORT)
+                    .setAction(R.string.dismiss) {
+
+                    }
+                    .show()
             } finally {
                 dialogFragment.dismiss()
             }
