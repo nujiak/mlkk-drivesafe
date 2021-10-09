@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.mylongkenkai.drivesafe.R
+import java.lang.StringBuilder
 
 class RecordAdapter (
     private val recordsList : List<Record>
@@ -22,7 +23,7 @@ class RecordAdapter (
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val v: View = LayoutInflater.from(parent.context)
-            .inflate(R.layout.fragment_log, parent, false)
+            .inflate(R.layout.record_item, parent, false)
         return ViewHolder(v)
     }
 
@@ -31,7 +32,10 @@ class RecordAdapter (
 
         val dateTextView = holder.dateAndTimeView
 
-        dateTextView.setText(currentDateAndTime.dateTime)
+        dateTextView.text = StringBuilder()
+            .append(currentDateAndTime.type.text)
+            .append(currentDateAndTime.dateTime.toString())
+            .toString()
     }
 
     override fun getItemCount(): Int {
