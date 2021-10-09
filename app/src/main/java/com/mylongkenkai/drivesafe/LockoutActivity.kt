@@ -21,10 +21,6 @@ class LockoutActivity : AppCompatActivity() {
 
         binding = ActivityLockoutBinding.inflate(layoutInflater)
 
-        model.linearAccelerometerLiveData.observe(this) {
-            binding.lockoutAccelerometerReading.text = it.toString()
-        }
-
         setContentView(binding.root)
     }
     
