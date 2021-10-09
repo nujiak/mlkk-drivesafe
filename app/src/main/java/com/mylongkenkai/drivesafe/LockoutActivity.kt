@@ -21,6 +21,8 @@ class LockoutActivity : AppCompatActivity() {
 
         binding = ActivityLockoutBinding.inflate(layoutInflater)
 
+        binding.lockoutAccelerometerReading.setText(R.string.lockout_screen)
+
         setContentView(binding.root)
     }
     
