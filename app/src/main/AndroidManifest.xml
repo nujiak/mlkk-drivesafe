@@ -15,7 +15,8 @@
         <activity
             android:name=".LockoutActivity"
             android:exported="true"
-            android:showOnLockScreen="true"/>
+            android:showOnLockScreen="true"
+            android:launchMode="singleInstance"/>
         <activity
             android:name=".MainActivity"
             android:exported="true">
