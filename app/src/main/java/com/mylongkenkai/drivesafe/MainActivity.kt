@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.widget.EditText
 import androidx.activity.viewModels
 import androidx.fragment.app.DialogFragment
-import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
@@ -15,7 +14,7 @@ import com.mylongkenkai.drivesafe.data.Exclusion
 import com.mylongkenkai.drivesafe.databinding.ActivityMainBinding
 import com.mylongkenkai.drivesafe.fragments.ExclusionsFragment
 import com.mylongkenkai.drivesafe.fragments.InputDialog
-import com.mylongkenkai.drivesafe.fragments.LogFragment
+import com.mylongkenkai.drivesafe.fragments.RecordFragment
 import java.lang.Exception
 import android.app.NotificationManager
 import android.content.Context
@@ -106,7 +105,7 @@ class MainActivity : AppCompatActivity(),
 
         override fun createFragment(position: Int): Fragment = when (position) {
             0 -> ExclusionsFragment()
-            1 -> LogFragment()
+            1 -> RecordFragment()
             else -> throw IllegalArgumentException("Invalid viewpager position $position")
         }
 
