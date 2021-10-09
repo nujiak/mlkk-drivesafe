@@ -1,5 +1,6 @@
 package com.mylongkenkai.drivesafe
 
+import android.Manifest
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -21,6 +22,7 @@ import android.content.Context
 import android.os.Build
 import android.provider.Settings
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 
 
 class MainActivity : AppCompatActivity(),
@@ -43,6 +45,9 @@ class MainActivity : AppCompatActivity(),
         } else {
             Toast.makeText(this,"Do Not Disturb permission not allowed.", Toast.LENGTH_SHORT).show()
         }
+
+        val permissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) {}
+        permissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
 
         val viewPager = binding.mainViewpager
         val btmNavBar = binding.mainBtmNavBar
