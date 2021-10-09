@@ -21,6 +21,7 @@ import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
 import android.provider.Settings
+import android.widget.Toast
 
 
 class MainActivity : AppCompatActivity(),
@@ -34,6 +35,15 @@ class MainActivity : AppCompatActivity(),
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
+
+        // get the notification manager system service
+        val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+
+        if (checkNotificationPolicyAccess(notificationManager)){
+            Toast.makeText(this,"Do Not Disturb permission allowed.", Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(this,"Do Not Disturb permission not allowed.", Toast.LENGTH_SHORT).show()
+        }
 
         val viewPager = binding.mainViewpager
         val btmNavBar = binding.mainBtmNavBar
@@ -114,5 +124,15 @@ class MainActivity : AppCompatActivity(),
             else -> throw IllegalArgumentException("Invalid viewpager position $position")
         }
 
+    }
+
+    private fun checkNotificationPolicyAccess(notificationManager:NotificationManager):Boolean{
+        if (notificationManager.isNotificationPolicyAccessGranted){
+            return true
+        }else{
+            val intent = Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS)
+            startActivity(intent)
+        }
+        return false
     }
 }
