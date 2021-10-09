@@ -1,11 +1,11 @@
 package com.mylongkenkai.drivesafe.data
 
 import android.content.Context
-import androidx.room.Database
-import androidx.room.Room
-import androidx.room.RoomDatabase
+import androidx.room.*
 
 @Database(entities = [Exclusion::class, Record::class], version = 1)
+@TypeConverters(Converters::class)
+
 abstract class AppDatabase : RoomDatabase() {
     abstract fun exclusionDao(): ExclusionDao
     abstract fun recordDao(): RecordDao
