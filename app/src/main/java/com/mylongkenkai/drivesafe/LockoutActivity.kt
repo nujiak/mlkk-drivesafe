@@ -17,9 +17,8 @@ class LockoutActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-        if (checkNotificationPolicyAccess(notificationManager)) {
-            notificationManager.onDOD()
-        }
+        notificationManager.onDOD()
+
         binding = ActivityLockoutBinding.inflate(layoutInflater)
 
         model.linearAccelerometerLiveData.observe(this) {
@@ -37,20 +36,10 @@ class LockoutActivity : AppCompatActivity() {
     override fun onStop() {
         super.onStop()
         val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-        if (checkNotificationPolicyAccess(notificationManager)) {
-            notificationManager.offDOD()
-        }
+        notificationManager.offDOD()
+
     }
 
-    private fun checkNotificationPolicyAccess(notificationManager: NotificationManager): Boolean {
-        if (notificationManager.isNotificationPolicyAccessGranted) {
-            return true
-        } else {
-            val intent = Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS)
-            startActivity(intent)
-        }
-        return false
-    }
 
     private fun NotificationManager.onDOD() {
         this.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_NONE)
