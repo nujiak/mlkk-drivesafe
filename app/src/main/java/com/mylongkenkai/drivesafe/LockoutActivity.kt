@@ -13,7 +13,7 @@ class LockoutActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLockoutBinding
 
-    private val model: MainViewModel by viewModels()
+    private val model: LockoutViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
