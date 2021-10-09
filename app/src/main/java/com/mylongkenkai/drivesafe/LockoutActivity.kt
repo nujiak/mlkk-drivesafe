@@ -32,6 +32,10 @@ class LockoutActivity : AppCompatActivity() {
             model.updateExclusionsList(it)
         }
 
+        model.speed.observe(this) {
+            Log.w("speed", "$it")
+        }
+
         setContentView(binding.root)
     }
     
