@@ -9,15 +9,15 @@
 ╚═════╝░╚═╝░░╚═╝╚═╝░░░╚═╝░░░╚══════╝╚═════╝░╚═╝░░╚═╝╚═╝░░░░░╚══════╝
    ```
 
-This is a project named _DriveSafe_ for PSA CODE SPRNT 2021. DriveSafe helps prevent mobile phone usage while driving to reduce risks of vehicular accidents due to distracted driving.
+This is a project named _DriveSafe_ for PSA CODE SPRINT 2021. DriveSafe helps prevent mobile phone usage while driving to reduce risks of vehicular accidents due to distracted driving.
 
 ## Features
 
 Features include:
 * Activity screen that activates when user is above a certain speed
-* Muting notifications and phone calls received when the lockscreen is up
+* Muting notifications and phone calls received when the lockscreen is up using android's Do Not Disturb mode
 * Adding emergency phone numbers to be excluded from being blocked out
-* Logging system to detect everytime the user exits the lockscreen prematurely
+* Logging system to detect everytime the user exits the screen prematurely or picks up a phone call
 
 
 How to use:
