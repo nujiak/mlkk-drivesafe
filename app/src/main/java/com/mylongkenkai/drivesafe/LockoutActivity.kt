@@ -3,6 +3,7 @@ package com.mylongkenkai.drivesafe
 import android.app.NotificationManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.viewModels
 import com.mylongkenkai.drivesafe.data.Record
 import com.mylongkenkai.drivesafe.databinding.ActivityLockoutBinding
@@ -25,6 +26,11 @@ class LockoutActivity : AppCompatActivity() {
         binding = ActivityLockoutBinding.inflate(layoutInflater)
 
         binding.lockoutAccelerometerReading.setText(R.string.lockout_screen)
+
+        model.exclusions.observe(this) {
+            Log.w(this::class.simpleName, "$it")
+            model.updateExclusionsList(it)
+        }
 
         setContentView(binding.root)
     }
