@@ -40,6 +40,7 @@ class MainActivity : AppCompatActivity(),
 
         val viewPager = binding.mainViewpager
         val btmNavBar = binding.mainBtmNavBar
+        val fab = binding.mainFab
 
         // Add MainPagerAdapter to view pager
         viewPager.adapter = MainPagerAdapter(this)
@@ -49,8 +50,14 @@ class MainActivity : AppCompatActivity(),
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 when (position) {
-                    0 -> btmNavBar.selectedItemId = R.id.btm_nav_exclusions
-                    1 -> btmNavBar.selectedItemId = R.id.btm_nav_log
+                    0 -> {
+                        btmNavBar.selectedItemId = R.id.btm_nav_exclusions
+                        fab.show()
+                    }
+                    1 -> {
+                        btmNavBar.selectedItemId = R.id.btm_nav_log
+                        fab.hide()
+                    }
                 }
             }
         })
@@ -58,10 +65,22 @@ class MainActivity : AppCompatActivity(),
         // Connect bottom navigation bar to view pager
         btmNavBar.setOnItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
-                R.id.btm_nav_exclusions -> viewPager.currentItem = 0
-                R.id.btm_nav_log -> viewPager.currentItem = 1
+                R.id.btm_nav_exclusions -> {
+                    viewPager.currentItem = 0
+                    fab.show()
+                }
+                R.id.btm_nav_log -> {
+                    viewPager.currentItem = 1
+                    fab.hide()
+                }
             }
             true
+        }
+
+        // Add FAB functionality
+        fab.setOnClickListener {
+            val inputDialog = InputDialog()
+            inputDialog.show(supportFragmentManager, "InputDialog")
         }
 
         // Begin foreground speed detection
