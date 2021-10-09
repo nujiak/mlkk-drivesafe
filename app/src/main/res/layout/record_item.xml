@@ -1,23 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="horizontal"
-    android:layout_width="match_parent"
-    android:layout_height="?attr/minTouchTargetSize"
     android:background="?attr/selectableItemBackground"
-    android:paddingStart="8dp"
-    >
+    android:minHeight="64dp"
+    android:layout_marginStart="16dp">
 
     <TextView
-        android:id="@+id/dateTime"
-        android:layout_width="0dp"
+        android:id="@+id/record_type"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingTop="16dp"
         android:paddingEnd="16dp"
-        tools:text="@string/example"
+        android:maxLines="1"
+        app:fontFamily="@font/open_sans_semibold"
+        tools:text="Start on:"
         android:textAppearance="?attr/textAppearanceSubtitle1"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:textColor="?android:attr/textColorPrimary" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        android:id="@+id/record_date_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/record_type"
+        android:layout_gravity="center_vertical"
+        android:paddingEnd="16dp"
+        android:maxLines="2"
+        tools:text="Oct 20..."
+        app:fontFamily="@font/open_sans"
+        android:textAppearance="?attr/textAppearanceBody2"
+        android:textColor="?android:attr/textColorPrimary" />
+
+
+</RelativeLayout>
