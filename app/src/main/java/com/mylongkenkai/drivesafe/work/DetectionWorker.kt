@@ -96,7 +96,7 @@ class DetectionWorker(appContext: Context, workerParams: WorkerParameters):
                 }
             }
         }
-
+        lastLocation = location
     }
 
     private val listener = object : LocationListener {

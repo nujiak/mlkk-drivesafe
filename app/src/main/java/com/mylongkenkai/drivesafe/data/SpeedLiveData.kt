@@ -48,7 +48,5 @@ class SpeedLiveData(context: Context) : LiveData<Float>(), LocationListener {
         lastLocation = location
     }
 
-    override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
-        super.onStatusChanged(provider, status, extras)
-    }
+    override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}
 }
