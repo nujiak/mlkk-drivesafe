@@ -14,7 +14,7 @@ This is a project named _DriveSafe_ for PSA CODE SPRNT 2021. DriveSafe helps pre
 ## Features
 
 Features include:
-* Lock screen that activates when user is above a certain speed
+* Activity screen that activates when user is above a certain speed
 * Muting notifications and phone calls received when the lockscreen is up
 * Adding emergency phone numbers to be excluded from being blocked out
 * Logging system to detect everytime the user exits the lockscreen prematurely
@@ -22,12 +22,14 @@ Features include:
 
 How to use:
 1. Download any of the releases from https://github.com/nujiak/mlkk-drivesafe/releases
-2. Run the .jar file
+2. Install the .apk file and launch the application
 3. Add the emergency phone numbers in
 4. Profit! 😎
 
 ## Technologies Used
-Kotlin, Android Studio, Android SDK
+* Kotlin
+* Android Studio
+* Android SDK
 
 
 ## Credits

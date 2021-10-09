@@ -8,4 +8,9 @@
     <string name="example">Example</string>
     <string name="delete">delete</string>
     <string name="exclusion_dialog_title">Add an emergency number</string>
+    <string name="stop">Stop</string>
+    <string name="lockout_screen">Stop using your phone!</string>
+
+    <string name="notification_channel_id">Detection</string>
+    <string name="notification_channel_desc">Allows DriveSafe to monitor your speed</string>
 </resources>

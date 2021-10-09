@@ -35,9 +35,8 @@ class ExclusionAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val currentExclusion = exclusions[position]
-        Log.i(this::class.simpleName, currentExclusion.toString())
         val textView = holder.phoneTextView
-        textView.setText(currentExclusion.phoneNumber.toString())
+        textView.text = currentExclusion.phoneNumber.toString()
         holder.deleteButton.setOnClickListener {
             delete(currentExclusion)
         }

@@ -16,18 +16,33 @@ import com.mylongkenkai.drivesafe.fragments.ExclusionsFragment
 import com.mylongkenkai.drivesafe.fragments.InputDialog
 import com.mylongkenkai.drivesafe.fragments.RecordFragment
 import java.lang.Exception
+import android.app.NotificationManager
+import android.content.Context
+import android.os.Build
+import android.provider.Settings
+import android.widget.Toast
+
 
 class MainActivity : AppCompatActivity(),
-        InputDialog.InputDialogListener {
+    InputDialog.InputDialogListener {
 
     private lateinit var binding: ActivityMainBinding
 
-    private val model : MainViewModel by viewModels()
+    private val model: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
+
+        // get the notification manager system service
+        val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+
+        if (checkNotificationPolicyAccess(notificationManager)){
+            Toast.makeText(this,"Do Not Disturb permission allowed.", Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(this,"Do Not Disturb permission not allowed.", Toast.LENGTH_SHORT).show()
+        }
 
         val viewPager = binding.mainViewpager
         val btmNavBar = binding.mainBtmNavBar
@@ -54,20 +69,6 @@ class MainActivity : AppCompatActivity(),
             }
             true
         }
-
-        model.linearAccelerometerLiveData.observe(this) {
-            if (it > 20) {
-                model.startBlocking()
-            }
-        }
-
-        model.isBlocking.observe(this) { isBlocking ->
-            if (isBlocking) {
-                val lockoutIntent = Intent(this, LockoutActivity::class.java)
-                startActivity(lockoutIntent)
-            }
-        }
-
         setContentView(binding.root)
     }
 
@@ -78,7 +79,7 @@ class MainActivity : AppCompatActivity(),
             try {
                 val number = input.toString().toInt()
                 model.addExclusion(Exclusion(number))
-            } catch (e : Exception) {
+            } catch (e: Exception) {
                 Snackbar.make(binding.root, R.string.invalid_number, Snackbar.LENGTH_SHORT).show()
             } finally {
                 dialogFragment.dismiss()
@@ -98,7 +99,8 @@ class MainActivity : AppCompatActivity(),
      *
      * @param activity MainActivity containing a ViewPager2
      */
-    private inner class MainPagerAdapter(activity : AppCompatActivity) : FragmentStateAdapter(activity) {
+    private inner class MainPagerAdapter(activity: AppCompatActivity) :
+        FragmentStateAdapter(activity) {
         override fun getItemCount(): Int = 2
 
         override fun createFragment(position: Int): Fragment = when (position) {
@@ -107,5 +109,15 @@ class MainActivity : AppCompatActivity(),
             else -> throw IllegalArgumentException("Invalid viewpager position $position")
         }
 
+    }
+
+    private fun checkNotificationPolicyAccess(notificationManager:NotificationManager):Boolean{
+        if (notificationManager.isNotificationPolicyAccessGranted){
+            return true
+        }else{
+            val intent = Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS)
+            startActivity(intent)
+        }
+        return false
     }
 }
