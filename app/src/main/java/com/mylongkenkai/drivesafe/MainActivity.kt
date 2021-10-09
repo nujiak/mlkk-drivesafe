@@ -1,11 +1,15 @@
 package com.mylongkenkai.drivesafe
 
 import android.Manifest
+import android.app.NotificationManager
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.widget.EditText
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
@@ -16,13 +20,6 @@ import com.mylongkenkai.drivesafe.databinding.ActivityMainBinding
 import com.mylongkenkai.drivesafe.fragments.ExclusionsFragment
 import com.mylongkenkai.drivesafe.fragments.InputDialog
 import com.mylongkenkai.drivesafe.fragments.RecordFragment
-import java.lang.Exception
-import android.app.NotificationManager
-import android.content.Context
-import android.os.Build
-import android.provider.Settings
-import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 
 
 class MainActivity : AppCompatActivity(),
@@ -37,17 +34,7 @@ class MainActivity : AppCompatActivity(),
 
         binding = ActivityMainBinding.inflate(layoutInflater)
 
-        // get the notification manager system service
-        val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-
-        if (checkNotificationPolicyAccess(notificationManager)){
-            Toast.makeText(this,"Do Not Disturb permission allowed.", Toast.LENGTH_SHORT).show()
-        } else {
-            Toast.makeText(this,"Do Not Disturb permission not allowed.", Toast.LENGTH_SHORT).show()
-        }
-
-        val permissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) {}
-        permissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+        requestPermissions()
 
         val viewPager = binding.mainViewpager
         val btmNavBar = binding.mainBtmNavBar
@@ -120,13 +107,33 @@ class MainActivity : AppCompatActivity(),
 
     }
 
-    private fun checkNotificationPolicyAccess(notificationManager:NotificationManager):Boolean{
-        if (notificationManager.isNotificationPolicyAccessGranted){
-            return true
-        }else{
+    private fun checkAndRequestDndPermission() {
+        // Request notification policy access permissions for toggling DND
+        val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+
+        if (!notificationManager.isNotificationPolicyAccessGranted) {
             val intent = Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS)
             startActivity(intent)
         }
-        return false
+    }
+
+    private fun requestPermissions() {
+
+        // Request location permissions
+        val backgroundLocationAccessPermissionLauncher =
+            registerForActivityResult(ActivityResultContracts.RequestPermission()) {
+                // Check DND permission after
+                checkAndRequestDndPermission()
+            }
+        val permissionLauncher =
+            registerForActivityResult(ActivityResultContracts.RequestPermission()) {
+                if (it && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    backgroundLocationAccessPermissionLauncher.launch(Manifest.permission.ACCESS_BACKGROUND_LOCATION)
+                } else {
+                    checkAndRequestDndPermission()
+                }
+            }
+
+        permissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
     }
 }
