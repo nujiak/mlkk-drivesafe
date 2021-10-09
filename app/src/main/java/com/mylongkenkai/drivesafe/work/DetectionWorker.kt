@@ -1,20 +1,31 @@
 package com.mylongkenkai.drivesafe.work
 
+import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import android.content.Context.LOCATION_SERVICE
 import android.content.Context.NOTIFICATION_SERVICE
 import android.content.Intent
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import android.location.Criteria
+import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
 import android.os.Build
+import android.os.Bundle
+import android.os.Looper
+import android.util.Log
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.work.*
 import com.mylongkenkai.drivesafe.LockoutActivity
 import com.mylongkenkai.drivesafe.R
+import java.util.*
 import kotlin.math.pow
 import kotlin.math.sqrt
 
@@ -31,7 +42,8 @@ class DetectionWorker(appContext: Context, workerParams: WorkerParameters):
     override suspend fun doWork(): Result {
 
         // Begin detection
-        detect()
+        detectByLocation()
+        detectBySensor()
 
         // Show notification
         setForeground(createForegroundInfo())
@@ -39,7 +51,48 @@ class DetectionWorker(appContext: Context, workerParams: WorkerParameters):
         return Result.success()
     }
 
-    private fun detect() {
+    @SuppressLint("MissingPermission")
+    private fun detectByLocation() {
+        Log.i(this::class.simpleName, "Attempting to detect by location")
+        val locationManager = applicationContext.getSystemService(LOCATION_SERVICE) as LocationManager
+
+        val provider = locationManager.getBestProvider(Criteria(), true) ?: return
+
+        locationManager.requestLocationUpdates(provider, 1000, 0.0f, listener, applicationContext.mainLooper)
+    }
+
+    private var lastLocation : Location? = null
+    private var lastUpdateTime = System.currentTimeMillis()
+
+    val listener = object : LocationListener {
+
+        override fun onLocationChanged(location: Location) {
+            Log.i(this::class.simpleName, "Location updated")
+
+            val currentTime = System.currentTimeMillis()
+
+            if (currentTime - lastUpdateTime < 5000) {
+                return
+            }
+
+            if (lastLocation != null) {
+                val distance = location.distanceTo(lastLocation)      // in metres
+                val duration = currentTime - lastUpdateTime     // in milliseconds
+                val speed = distance / (duration / 1000)        // in metres per second
+                Log.i(this::class.simpleName, "Speed: $speed")
+                if (speed > 10) {
+                    startLockout()
+                }
+            }
+            lastLocation = location
+            lastUpdateTime = currentTime
+        }
+
+        override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
+        }
+    }
+
+    private fun detectBySensor() {
         val sensorManager = applicationContext.getSystemService(Context.SENSOR_SERVICE) as SensorManager
         val sensor = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION)
 
@@ -51,14 +104,18 @@ class DetectionWorker(appContext: Context, workerParams: WorkerParameters):
                 }
                 val values = event.values
                 if (isDriving(values[0], values[1], values[2])) {
-                    val lockoutIntent = Intent(applicationContext, LockoutActivity::class.java)
-                    lockoutIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    applicationContext.startActivity(lockoutIntent)
+                    startLockout()
                 }
             }
 
             override fun onAccuracyChanged(sensor: Sensor?, p1: Int) {}
         }, sensor, SensorManager.SENSOR_DELAY_NORMAL)
+    }
+
+    private fun startLockout() {
+        val lockoutIntent = Intent(applicationContext, LockoutActivity::class.java)
+        lockoutIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        applicationContext.startActivity(lockoutIntent)
     }
 
     private fun isDriving(x: Float, y: Float, z: Float): Boolean {
