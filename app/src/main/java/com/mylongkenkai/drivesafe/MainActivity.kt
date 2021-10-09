@@ -70,20 +70,6 @@ class MainActivity : AppCompatActivity(),
             }
             true
         }
-
-        model.linearAccelerometerLiveData.observe(this) {
-            if (it > 20) {
-                model.startBlocking()
-            }
-        }
-
-        model.isBlocking.observe(this) { isBlocking ->
-            if (isBlocking) {
-                val lockoutIntent = Intent(this, LockoutActivity::class.java)
-                startActivity(lockoutIntent)
-            }
-        }
-
         setContentView(binding.root)
     }
 

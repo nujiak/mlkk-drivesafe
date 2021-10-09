@@ -27,19 +27,13 @@ class LockoutActivity : AppCompatActivity() {
 
         setContentView(binding.root)
     }
-
-    override fun onPause() {
-        super.onPause()
-        model.finishBlocking()
-    }
-
+    
     override fun onStop() {
         super.onStop()
         val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.offDOD()
 
     }
-
 
     private fun NotificationManager.onDOD() {
         this.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_NONE)
@@ -48,5 +42,4 @@ class LockoutActivity : AppCompatActivity() {
     fun NotificationManager.offDOD() {
         this.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_ALL)
     }
-
 }
