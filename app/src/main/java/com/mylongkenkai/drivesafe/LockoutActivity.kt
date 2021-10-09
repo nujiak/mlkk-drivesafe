@@ -18,9 +18,4 @@ class LockoutActivity : AppCompatActivity() {
 
         setContentView(binding.root)
     }
-
-    override fun onPause() {
-        super.onPause()
-        model.finishBlocking()
-    }
 }
