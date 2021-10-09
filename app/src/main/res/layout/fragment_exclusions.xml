@@ -18,7 +18,7 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/exclusions_fab"
-        app:icon="@drawable/ic_round_add_24"
+        android:src="@drawable/ic_round_add_24"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"

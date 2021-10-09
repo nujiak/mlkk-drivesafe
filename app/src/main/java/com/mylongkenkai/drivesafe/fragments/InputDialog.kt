@@ -18,7 +18,7 @@ class InputDialog : androidx.fragment.app.DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val alertDialog: AlertDialog = activity?.let {
-            val builder = AlertDialog.Builder(it).setTitle("Add an Emergency Number")
+            val builder = AlertDialog.Builder(it).setTitle(R.string.exclusion_dialog_title)
                 .setView(requireActivity().layoutInflater.inflate(R.layout.dialog_input, null))
                 .setPositiveButton(android.R.string.ok) { _, _ ->
                     listener.onDialogPositiveClick(this)
