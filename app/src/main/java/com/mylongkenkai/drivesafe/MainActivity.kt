@@ -48,6 +48,7 @@ class MainActivity : AppCompatActivity(),
 
         val permissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) {}
         permissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+        permissionLauncher.launch(Manifest.permission.READ_CALL_LOG)
 
         val viewPager = binding.mainViewpager
         val btmNavBar = binding.mainBtmNavBar
