@@ -6,4 +6,5 @@ enum class Tag(val text: Int) {
     PREMATURE(R.string.tag_premature),
     CALL(R.string.tag_call),
     CALLEND(R.string.tag_callend),
+    EXCALL(R.string.tag_excluded)
 }

@@ -2,9 +2,12 @@ package com.mylongkenkai.drivesafe
 
 
 import android.app.Application
+import android.app.NotificationManager
 import android.content.Context
 import android.telephony.PhoneStateListener
 import android.telephony.TelephonyManager
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.AndroidViewModel
 import com.mylongkenkai.drivesafe.data.AppDatabase
 import com.mylongkenkai.drivesafe.data.Exclusion
@@ -42,6 +45,9 @@ class LockoutViewModel(app: Application) : AndroidViewModel(app) {
                     if (!isExcluded) {
                         val record = Record(0, Date(), Tag.CALL)
                         addRecord(record)
+                    } else {
+                        val record = Record(0, Date(), Tag.EXCALL)
+                        addRecord(record)
                     }
                     previousState = TelephonyManager.CALL_STATE_OFFHOOK
                 }
@@ -53,10 +59,18 @@ class LockoutViewModel(app: Application) : AndroidViewModel(app) {
                         val record = Record(0, Date(), Tag.CALLEND)
                         addRecord(record)
                     }
-
+                    val notificationManager = app.getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager
+                    notificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_NONE)
                     previousState = TelephonyManager.CALL_STATE_IDLE
                 }
                 TelephonyManager.CALL_STATE_RINGING -> {
+                    val isExcluded = exclusionsList.any {
+                        it.phoneNumber == incomingNumber.toInt()
+                    }
+                    if (isExcluded) {
+                        val notificationManager = app.getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager
+                        notificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_ALL)
+                    }
                     previousState = TelephonyManager.CALL_STATE_RINGING
                 }
             }
