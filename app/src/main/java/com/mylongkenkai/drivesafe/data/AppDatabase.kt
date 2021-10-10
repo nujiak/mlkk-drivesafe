@@ -3,9 +3,8 @@ package com.mylongkenkai.drivesafe.data
 import android.content.Context
 import androidx.room.*
 
-@Database(entities = [Exclusion::class, Record::class], version = 1)
+@Database(entities = [Exclusion::class, Record::class], version = 1, exportSchema = false)
 @TypeConverters(Converters::class)
-
 abstract class AppDatabase : RoomDatabase() {
     abstract fun exclusionDao(): ExclusionDao
     abstract fun recordDao(): RecordDao
