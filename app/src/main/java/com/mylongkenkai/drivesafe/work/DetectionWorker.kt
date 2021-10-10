@@ -49,7 +49,7 @@ class DetectionWorker(appContext: Context, workerParams: WorkerParameters):
         detectByLocation()
         detectBySensor()
 
-        return Result.success()
+        return Result.retry()
     }
 
     private var lastLocation : Location? = null
@@ -82,21 +82,21 @@ class DetectionWorker(appContext: Context, workerParams: WorkerParameters):
     }
 
     private fun onLocationUpdate(location: Location) {
-        if (lastLocation == null) {
-            lastLocation = location
-        }
 
-        lastLocation?.let {
-            if (location.time > it.time) {
-                val distance = location.distanceTo(lastLocation)    // in metres
-                val duration = location.time - it.time              // in milliseconds
-                val speed = distance / (duration / 1000)            // in metres per second
+        val lastLocation = lastLocation
+
+        if (lastLocation != null) {
+            if (location.time > lastLocation.time) {
+                val distance = location.distanceTo(lastLocation) // in metres
+                val duration = location.time - lastLocation.time // in milliseconds
+                val speed = distance / (duration / 1000)         // in metres per second
                 if (speed > 10) {
                     startLockout()
                 }
             }
         }
-        lastLocation = location
+
+        this.lastLocation = location
     }
 
     private val listener = object : LocationListener {
