@@ -16,6 +16,9 @@ class RecordAdapter (
         val dateTimeTextView : TextView = itemView.findViewById(R.id.record_date_time)
     }
 
+    override fun getItemId(position: Int): Long {
+        return recordsList[position].entryId.toLong()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val v: View = LayoutInflater.from(parent.context)

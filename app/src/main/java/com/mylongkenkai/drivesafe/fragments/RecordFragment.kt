@@ -39,6 +39,7 @@ class RecordFragment : Fragment() {
                 binding.recordList.visibility = View.VISIBLE
 
                 val newAdapter = RecordAdapter(it)
+                newAdapter.setHasStableIds(true)
                 binding.recordList.swapAdapter(newAdapter,false)
             }
         }
