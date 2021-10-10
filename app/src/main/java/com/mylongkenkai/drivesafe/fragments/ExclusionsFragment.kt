@@ -28,8 +28,17 @@ class ExclusionsFragment : Fragment() {
         // Update body based on exclusions data
         binding.exclusionList.layoutManager = LinearLayoutManager(context)
         model.getExclusions().observe(viewLifecycleOwner) {
-            val newAdapter = ExclusionAdapter(it, model::removeExclusion)
-            binding.exclusionList.swapAdapter(newAdapter,false)
+            if (it.isEmpty()) {
+                binding.exclusionsEmptyGroup.visibility = View.VISIBLE
+                binding.exclusionList.visibility = View.GONE
+            } else {
+                binding.exclusionsEmptyGroup.visibility = View.GONE
+                binding.exclusionList.visibility = View.VISIBLE
+
+                val newAdapter = ExclusionAdapter(it, model::removeExclusion)
+                newAdapter.setHasStableIds(true)
+                binding.exclusionList.swapAdapter(newAdapter,false)
+            }
         }
 
         return binding.root

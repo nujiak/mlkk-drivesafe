@@ -22,4 +22,7 @@
     <string name="tag_call">Answered call</string>
     <string name="tag_callend">Finished call</string>
     <string name="tag_excluded">Answered emergency call</string>
+  
+    <string name="exclusions_empty">Press + to whitelist a number</string>
+    <string name="records_empty">Your activity will be recorded here as you work</string>
 </resources>
