@@ -32,12 +32,6 @@ class ExclusionsFragment : Fragment() {
             binding.exclusionList.swapAdapter(newAdapter,false)
         }
 
-        // Add FAB functionality
-        binding.exclusionsFab.setOnClickListener {
-            val inputDialog = InputDialog()
-            inputDialog.show(childFragmentManager, "InputDialog")
-        }
-
         return binding.root
     }
 

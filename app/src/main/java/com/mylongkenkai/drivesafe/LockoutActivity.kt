@@ -4,6 +4,7 @@ import android.app.NotificationManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Window
 import androidx.activity.viewModels
 import com.mylongkenkai.drivesafe.data.Record
 import com.mylongkenkai.drivesafe.databinding.ActivityLockoutBinding
@@ -18,12 +19,14 @@ class LockoutActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        supportActionBar?.hide()
+
         val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.onDOD()
         val currentTime = Record(0,Date(), Tag.START)
         model.addRecord(currentTime)
         binding = ActivityLockoutBinding.inflate(layoutInflater)
-        binding.lockoutText.setText(R.string.lockout_screen)
 
         model.exclusions.observe(this) {
             Log.w(this::class.simpleName, "$it")

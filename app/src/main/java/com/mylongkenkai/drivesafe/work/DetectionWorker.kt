@@ -96,7 +96,7 @@ class DetectionWorker(appContext: Context, workerParams: WorkerParameters):
                 }
             }
         }
-
+        lastLocation = location
     }
 
     private val listener = object : LocationListener {
@@ -156,7 +156,7 @@ class DetectionWorker(appContext: Context, workerParams: WorkerParameters):
             .setChannelId(id)
             .setPriority(NotificationCompat.PRIORITY_LOW)
             .addAction(android.R.drawable.ic_delete, stop, cancelIntent)
-            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setSmallIcon(R.drawable.ic_round_directions_car_24)
             .build()
 
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {

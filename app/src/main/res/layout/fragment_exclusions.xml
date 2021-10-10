@@ -16,14 +16,4 @@
         app:layout_constraintTop_toTopOf="parent"
         />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/exclusions_fab"
-        android:src="@drawable/ic_round_add_24"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:background="@color/purple_200"
-        android:layout_gravity="bottom|end"
-        android:contentDescription="@string/exclusions_fab_content_desc" />
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
