@@ -8,7 +8,7 @@ import androidx.room.Query
 
 @Dao
 interface RecordDao {
-    @Query("SELECT * FROM record_table ORDER BY entryId ASC")
+    @Query("SELECT * FROM record_table ORDER BY entryId DESC")
     fun getAll(): LiveData<List<Record>>
 
     @Insert
