@@ -90,7 +90,7 @@ class DetectionWorker(appContext: Context, workerParams: WorkerParameters):
                 val distance = location.distanceTo(lastLocation) // in metres
                 val duration = location.time - lastLocation.time // in milliseconds
                 val speed = distance / (duration / 1000)         // in metres per second
-                if (speed > 10) {
+                if (speed > 6) {
                     startLockout()
                 }
             }

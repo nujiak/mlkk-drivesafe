@@ -83,7 +83,7 @@ class LockoutViewModel(app: Application) : AndroidViewModel(app) {
     }
 
     fun addRecordEnd() {
-        if (speed.value == null || speed.value!! < 10) {
+        if (speed.value == null || speed.value!! < 6) {
             val record = Record(0, Date(), Tag.END)
             addRecord(record)
         } else {
