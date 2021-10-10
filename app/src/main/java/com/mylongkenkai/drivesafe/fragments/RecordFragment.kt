@@ -31,9 +31,16 @@ class RecordFragment : Fragment() {
 
         binding.recordList.layoutManager = LinearLayoutManager(context)
         model.getRecords().observe(viewLifecycleOwner) {
-            Log.i(this::class.simpleName, it.toString())
-            val newAdapter = RecordAdapter(it)
-            binding.recordList.swapAdapter(newAdapter,false)
+            if (it.isEmpty()) {
+                binding.recordsEmptyGroup.visibility = View.VISIBLE
+                binding.recordList.visibility = View.GONE
+            } else {
+                binding.recordsEmptyGroup.visibility = View.GONE
+                binding.recordList.visibility = View.VISIBLE
+
+                val newAdapter = RecordAdapter(it)
+                binding.recordList.swapAdapter(newAdapter,false)
+            }
         }
 
         return binding.root
