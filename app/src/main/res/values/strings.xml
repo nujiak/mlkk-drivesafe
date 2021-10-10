@@ -20,4 +20,7 @@
     <string name="tag_end">Closed</string>
     <string name="tag_premature">Closed prematurely</string>
     <string name="tag_call">Answered call</string>
+
+    <string name="exclusions_empty">Press + to whitelist a number</string>
+    <string name="records_empty">Your activity will be recorded here as you work</string>
 </resources>

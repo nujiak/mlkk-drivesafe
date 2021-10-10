@@ -15,6 +15,35 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="gone"
         />
+
+    <LinearLayout
+        android:id="@+id/records_empty_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:padding="64dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" >
+        <ImageView
+            android:layout_width="128dp"
+            android:layout_height="128dp"
+            android:layout_margin="16dp"
+            android:src="@drawable/ic_baseline_sd_storage_24"
+            app:tint="@android:color/darker_gray" />
+        <TextView
+            android:layout_width="192dp"
+            android:layout_height="wrap_content"
+            android:text="@string/records_empty"
+            android:gravity="center"
+            app:fontFamily="@font/open_sans_semibold"
+            android:textColor="@android:color/darker_gray"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"/>
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
