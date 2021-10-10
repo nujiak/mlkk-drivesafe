@@ -14,7 +14,8 @@
         app:title="@string/app_name"
         android:elevation="4dp"
         app:layout_constraintTop_toTopOf="parent"
-        app:menu="@menu/main_action_bar_menu" />
+        app:menu="@menu/main_action_bar_menu"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/main_viewpager"
