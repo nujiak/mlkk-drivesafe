@@ -12,6 +12,7 @@
     <string name="lockout_screen">Stop using your phone!</string>
     <string name="dismiss">Dismiss</string>
     <string name="lockout_speed_text">%.2f m/s</string>
+    <string name="start_driving">Drive</string>
 
     <string name="notification_channel_id">Detection</string>
     <string name="notification_channel_desc">Allows DriveSafe to monitor your speed</string>
