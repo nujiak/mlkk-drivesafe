@@ -6,6 +6,8 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.EditText
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -35,6 +37,8 @@ class MainActivity : AppCompatActivity(),
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
+
+        setSupportActionBar(binding.mainActionBar)
 
         requestPermissions()
 
@@ -89,6 +93,22 @@ class MainActivity : AppCompatActivity(),
         WorkManager.getInstance(applicationContext)
             .enqueueUniqueWork("detect", ExistingWorkPolicy.REPLACE, detectionWorkRequest)
         setContentView(binding.root)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.launch_lockout -> {
+                val lockoutIntent = Intent(applicationContext, LockoutActivity::class.java)
+                startActivity(lockoutIntent)
+                true
+            }
+            else -> false
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.main_action_bar_menu, menu)
+        return true
     }
 
     override fun onDialogPositiveClick(dialogFragment: DialogFragment) {
