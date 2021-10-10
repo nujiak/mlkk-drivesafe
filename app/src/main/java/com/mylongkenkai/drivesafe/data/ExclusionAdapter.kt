@@ -25,6 +25,9 @@ class ExclusionAdapter(
         }
     }
 
+    override fun getItemId(position: Int): Long {
+        return exclusions[position].phoneNumber.toLong()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)

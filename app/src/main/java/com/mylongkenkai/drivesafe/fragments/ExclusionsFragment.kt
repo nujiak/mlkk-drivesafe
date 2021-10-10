@@ -36,6 +36,7 @@ class ExclusionsFragment : Fragment() {
                 binding.exclusionList.visibility = View.VISIBLE
 
                 val newAdapter = ExclusionAdapter(it, model::removeExclusion)
+                newAdapter.setHasStableIds(true)
                 binding.exclusionList.swapAdapter(newAdapter,false)
             }
         }
