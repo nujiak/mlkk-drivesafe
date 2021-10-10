@@ -5,7 +5,6 @@ import android.app.Application
 import android.content.Context
 import android.telephony.PhoneStateListener
 import android.telephony.TelephonyManager
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import com.mylongkenkai.drivesafe.data.AppDatabase
 import com.mylongkenkai.drivesafe.data.Exclusion
@@ -30,10 +29,10 @@ class LockoutViewModel(app: Application) : AndroidViewModel(app) {
 
     fun updateExclusionsList(exclusionsList: List<Exclusion>) {
         this.exclusionsList = exclusionsList
-        Log.w(this::class.simpleName, "$exclusionsList")
     }
 
     private val phoneStateListener = object : PhoneStateListener() {
+        var previousState = TelephonyManager.CALL_STATE_IDLE
         override fun onCallStateChanged(state: Int, incomingNumber: String) {
             when (state) {
                 TelephonyManager.CALL_STATE_OFFHOOK -> {
@@ -44,10 +43,21 @@ class LockoutViewModel(app: Application) : AndroidViewModel(app) {
                         val record = Record(0, Date(), Tag.CALL)
                         addRecord(record)
                     }
+                    previousState = TelephonyManager.CALL_STATE_OFFHOOK
                 }
                 TelephonyManager.CALL_STATE_IDLE -> {
+                    val isExcluded = exclusionsList.any {
+                        it.phoneNumber == incomingNumber.toInt()
+                    }
+                    if (!isExcluded && previousState == TelephonyManager.CALL_STATE_OFFHOOK) {
+                        val record = Record(0, Date(), Tag.CALLEND)
+                        addRecord(record)
+                    }
+
+                    previousState = TelephonyManager.CALL_STATE_IDLE
                 }
                 TelephonyManager.CALL_STATE_RINGING -> {
+                    previousState = TelephonyManager.CALL_STATE_RINGING
                 }
             }
         }
